@@ -4,10 +4,12 @@ import router from './router'
 import store from './store'
 import './assets/tailwind.scss'
 import firebase from 'firebase/app'
+import moment from 'moment'
 import 'firebase/analytics'
 import 'firebase/performance'
 import 'firebase/remote-config'
 import 'firebase/auth'
+import 'firebase/firestore'
 const firebaseConfig = {
   apiKey: "AIzaSyCvP2O35KnfzOghBF6Ou3bQcD6xCkmeLb0",
   authDomain: "hyphen-hacks-2020.firebaseapp.com",
@@ -20,6 +22,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig)
 Vue.prototype.$firebase = firebase
+Vue.prototype.$moment = moment
 Vue.config.productionTip = false
 
 new Vue({

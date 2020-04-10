@@ -1,30 +1,26 @@
 <template>
   <div class="page">
     <navBar></navBar>
-
     <main class="page__content">
 
       <div class="screen">
-        <h1 class="heading">Create an account</h1>
-        <p class="desc">In order to apply to Hyphen-Hacks you must create an account with us. You will use this account
-          to
-          apply and view your registration status.</p>
+        <h1 class="heading">Login</h1>
+        <p class="desc">Login to view your Hyphen-Hacks dashboard</p>
         <div v-if="!emailSignUp" class="grid justify-center">
-          <button @click="signInWithGithub" class="btn--dark mt-4 "><i class="fab fa-github"></i> Sign up with
+          <button @click="signInWithGithub" class="btn--dark mt-4"><i class="fab fa-github"></i> Login with
             Github
           </button>
-          <button @click="signInWithGoogle" class="btn--dark mt-2 "><i class="fab fa-google"></i> Sign up with
+          <button @click="signInWithGoogle" class="btn--dark mt-4 "><i class="fab fa-google"></i> Login with
             Google
           </button>
-          <button @click="emailSignUp = true" class="btn mt-2">Use email and password</button>
+          <button @click="emailSignUp = true" class="btn mt-4">Use email and password</button>
         </div>
         <button v-if="emailSignUp" @click="emailSignUp = false" class="mr-auto mt-5 text-primary">back</button>
         <form @submit.prevent="signUpEmail" v-show="emailSignUp" class="flex flex-col justify-center">
-
           <input required placeholder="email" type="email" class="input mb-5" v-model="email">
           <input required placeholder="password" type="password" class="input" v-model="pass">
           <p class="text-warning">{{emailError}}</p>
-          <button type="submit" @click.prevent="signUpEmail" class="btn mt-5 mx-auto">Sign Up</button>
+          <button type="submit" @click.prevent="signUpEmail" class="btn mt-5 mx-auto">Login</button>
         </form>
 
       </div>
@@ -33,17 +29,18 @@
 </template>
 <script>
   import navBar from "@/components/nav.vue"
+  import Loader from "@/components/loading.vue"
 
   export default {
     name: "Auth",
-    components: {navBar},
+    components: {navBar, Loader},
     data() {
       return {
         emailSignUp: false,
         email: "",
         pass: "",
         emailError: "",
-        loading: true
+
       }
     },
     computed: {
@@ -53,12 +50,34 @@
     },
     created() {
       if (this.user) {
-        this.$router.push('/apply/attendee')
+        this.handleUser()
       } else {
         this.$store.commit("loading", false)
       }
     },
     methods: {
+      handleUser() {
+        console.log( "handling user", this.user.uid)
+        if (this.user) {
+          this.$firebase.firestore().collection("users").doc(this.user.uid).get().then(doc => {
+            if (doc.exists) {
+              let data = doc.data()
+              console.log(data.intent, data.intent == "applyAttendee", "intent")
+              switch (data.intent) {
+                case "applyAttendee":
+                  this.$router.push('/apply/attendee')
+                  break
+                default:
+                  this.$router.push('/apply')
+                  break
+              }
+            } else {
+
+            }
+          })
+
+        }
+      },
       signInWithGoogle() {
         var provider = new this.$firebase.auth.GoogleAuthProvider();
         this.$firebase.auth().signInWithRedirect(provider);
@@ -68,10 +87,12 @@
         this.$firebase.auth().signInWithRedirect(provider);
       },
       signUpEmail() {
-        this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.pass).then(user => {
-          this.$store.commit("user", user)
-          this.$router.push("/apply/attendee")
-        }).catch( (error) => {
+        this.emailSignUp = true
+        this.$firebase.auth().signInWithEmailAndPassword(this.email, this.pass).then(user => {
+          console.log("logged in", user.user.uid)
+          this.$store.commit("user", user.user)
+          this.handleUser()
+        }).catch((error) => {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;

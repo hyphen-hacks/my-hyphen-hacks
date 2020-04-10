@@ -26,6 +26,9 @@ module.exports = {
         hover: "#c9c9c9",
         lightest: "#EFEFEF"
       },
+      warning: {
+        default: "#f56565"
+      },
       red: {
         100: '#fff5f5',
         200: '#fed7d7',

@@ -6,9 +6,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: false,
-    firebaseLoaded: false
+    firebaseLoaded: false,
+    loading: true
   },
   getters: {
+    loading(state) {
+      return state.loading
+    },
     user(state) {
       return state.user
     },
@@ -17,6 +21,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    loading(state, load) {
+      state.loading = load
+    },
     user(state, user) {
       return state.user = user
     },

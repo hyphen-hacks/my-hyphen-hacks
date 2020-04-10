@@ -97,6 +97,7 @@ a:hover {
   grid-template-rows: 1fr 1fr 1fr;
   position: fixed;
   z-index: 9999999999999;
+  @apply bg-gray;
 }
 .page {
   width: 100vw;
@@ -120,6 +121,7 @@ a:hover {
 .screen {
   @include card;
   max-width: 600px;
+  width: 90vw;
 
 }
 .screen--wide {

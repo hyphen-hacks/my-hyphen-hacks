@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-<Loader v-if="!firebaseLoaded">
+    <Loader v-if="!firebaseLoaded || loading">
 
-</Loader>
+    </Loader>
     <router-view v-if="firebaseLoaded"/>
   </div>
 </template>
 <script>
   import Loader from "@/components/loading.vue"
+
   export default {
     name: "app",
     components: {Loader},
@@ -23,6 +24,9 @@
       })
     },
     computed: {
+      loading() {
+        return this.$store.getters.loading
+      },
       firebaseLoaded() {
         return this.$store.getters.firebaseLoaded
       }

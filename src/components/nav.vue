@@ -38,6 +38,7 @@
       logOut() {
         this.$firebase.auth().signOut().then(err => {
           this.$store.commit("user", false)
+          this.$router.push("/")
         })
       }
     }

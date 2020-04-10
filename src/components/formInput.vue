@@ -23,7 +23,7 @@ notRequired: Boolean,
       return !this.shouldBeRequired
     },
     inputMode() {
-      console.log(this.inputType)
+     // console.log(this.inputType)
       switch (this.inputType) {
         case "text":
         case "email":
