@@ -7,9 +7,18 @@ export default new Vuex.Store({
   state: {
     user: false,
     firebaseLoaded: false,
-    loading: true
+    loading: true,
+    api: "https://2020.hyphen-hacks.com"
   },
   getters: {
+    api(state) {
+      if (window.location.hostname === "localhost") {
+        return "http://localhost:3005"
+      } else {
+        return state.api
+      }
+
+    },
     loading(state) {
       return state.loading
     },

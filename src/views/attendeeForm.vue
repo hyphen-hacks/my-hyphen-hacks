@@ -19,42 +19,53 @@
         </div>
         <div class="input__row">
           <formInput title="Email" inputType="email"
-                     desc="This email will be used for all further communications including the status of your application" v-model="applicationModel.email"></formInput>
+                     desc="This email will be used for all further communications including the status of your application"
+                     v-model="applicationModel.email"></formInput>
         </div>
         <div class="input__row">
           <formInput title="Zipcode" inputType="zipcode"
-                     desc="We aggregate this data to figure out how much of the Bay Area we are reaching" v-model="applicationModel.zip"></formInput>
+                     desc="We aggregate this data to figure out how much of the Bay Area we are reaching"
+                     v-model="applicationModel.zip"></formInput>
         </div>
         <div class="input__row--2">
           <formInput title="Birthday" inputType="date"
-                     desc="We use this information to verify you are eligible for Hyphen-Hacks" v-model="applicationModel.birthday"></formInput>
+                     desc="We use this information to verify you are eligible for Hyphen-Hacks"
+                     v-model="applicationModel.birthday"></formInput>
           <formInput title="Gender" inputType="text"
-                     desc="We agregate this data to figure out what genders we are reaching" v-model="applicationModel.gender"></formInput>
+                     desc="We agregate this data to figure out what genders we are reaching"
+                     v-model="applicationModel.gender"></formInput>
         </div>
         <div class="input__row">
           <formInput title="Race/Ethnicity" inputType="text"
-                     desc="We aggregate this data to figure out what races/elasticities we are reaching" v-model="applicationModel.race"></formInput>
+                     desc="We aggregate this data to figure out what races/elasticities we are reaching"
+                     v-model="applicationModel.race"></formInput>
         </div>
         <div class="input__row--2">
           <formInput title="School" inputType="text"
-                     desc="We aggregate this data to learn what schools we are reaching." v-model="applicationModel.school"></formInput>
+                     desc="We aggregate this data to learn what schools we are reaching."
+                     v-model="applicationModel.school"></formInput>
           <formInput title="Year of Graduation" inputType="text"
-                     desc="We use this data to verify your eligibility for Hyphen-Hacks as well as aggregate data to figure out what grades we are reaching." v-model="applicationModel.graduation"></formInput>
+                     desc="We use this data to verify your eligibility for Hyphen-Hacks as well as aggregate data to figure out what grades we are reaching."
+                     v-model="applicationModel.graduation"></formInput>
         </div>
       </div>
       <div class="screen--wide">
         <h2 class="heading">Why do you want to attend?</h2>
         <div class="input__row">
-          <formInput title="Why are you interested in attending Hyphen-Hacks?" inputType="longform" v-model="applicationModel.whyAreYouInterested"></formInput>
+          <formInput title="Why are you interested in attending Hyphen-Hacks?" inputType="longform"
+                     v-model="applicationModel.whyAreYouInterested"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with software development?" inputType="text" v-model="applicationModel.softwareExperience"></formInput>
+          <formInput title="How much experience do you have with software development?" inputType="text"
+                     v-model="applicationModel.softwareExperience"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with hackathons?" inputType="text" v-model="applicationModel.hackathonExperience"></formInput>
+          <formInput title="How much experience do you have with hackathons?" inputType="text"
+                     v-model="applicationModel.hackathonExperience"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with coding in teams?" inputType="text" v-model="applicationModel.teamCodingExperience"></formInput>
+          <formInput title="How much experience do you have with coding in teams?" inputType="text"
+                     v-model="applicationModel.teamCodingExperience"></formInput>
         </div>
       </div>
       <div class="screen--wide">
@@ -69,6 +80,7 @@
 <script>
   import formInput from "@/components/formInput.vue"
   import navBar from "@/components/nav.vue"
+
   let timeout = null
   export default {
     name: "attendeeApplicationForm",
@@ -94,7 +106,7 @@
       }
     },
     created() {
-      this.$store.commit("loading",  true)
+      this.$store.commit("loading", true)
       if (!this.user) {
         this.$router.push('/signup/attendee')
       } else {
@@ -114,6 +126,7 @@
           emailVerified: this.user.emailVerified,
           uid: this.user.uid,
           photoURL: this.user.photoURL ? this.user.photoURL : "",
+          provider: this.user.providerData ? this.user.providerData : [],
           lastSeen: this.$moment().unix(),
           intent: "applyAttendee"
         })
@@ -127,13 +140,15 @@
     methods: {
       save() {
         timeout = null
-        this.$firebase.firestore().collection("attendeeApplicationsIP").doc(this.user.uid).set({time: this.$moment().unix(), data: this.applicationModel}, {merge: true}).then(() => {
+        this.$firebase.firestore().collection("attendeeApplicationsIP").doc(this.user.uid).set({
+          time: this.$moment().unix(), data: this.applicationModel
+        }, {merge: true}).then(() => {
           this.saved = true
         })
 
       },
       startSave() {
-this.saved = false
+        this.saved = false
 
         window.clearTimeout(timeout)
         timeout = window.setTimeout(() => this.save(), 1000)
