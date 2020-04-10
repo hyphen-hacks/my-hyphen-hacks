@@ -22,7 +22,7 @@ module.exports = {
         default: "#191919",
         lighter: "#333333",
         form: "#5C5C5C",
-        form_hover: "#515151",
+        form_hover: "#222222",
         hover: "#c9c9c9",
         lightest: "#EFEFEF"
       },
