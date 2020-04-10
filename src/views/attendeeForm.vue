@@ -1,6 +1,6 @@
 <template>
   <div>
-    <navBar title="Attendee Application" :saved="true"></navBar>
+    <navBar title="Attendee Application" :saved="true" :saveStatus="true"></navBar>
   <form @submit.prevent class="form">
     <div class="screen--wide">
       <h1 class="heading--large">Apply For Hyphen-Hacks 2020</h1>

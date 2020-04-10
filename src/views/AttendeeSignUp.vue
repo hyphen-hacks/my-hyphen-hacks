@@ -1,5 +1,9 @@
 <template>
-  <main class="page">
+  <div class="page">
+    <navBar></navBar>
+
+  <main class="page__content">
+
     <div class="screen">
       <h1 class="heading">Create an account</h1>
       <p class="desc">In order to apply to Hyphen-Hacks you must create an account with us. You will use this account to
@@ -20,10 +24,13 @@
 
     </div>
   </main>
+  </div>
 </template>
 <script>
+  import navBar from "@/components/nav.vue"
   export default {
     name: "Auth",
+    components: {navBar},
     data() {
       return {
         emailSignUp: false,
@@ -33,12 +40,12 @@
     },
     methods: {
       signInWithGoogle() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithRedirect(provider);
+        var provider = new this.$firebase.auth.GoogleAuthProvider();
+        this.$firebase.auth().signInWithRedirect(provider);
       },
       signInWithGithub() {
-        var provider = new firebase.auth.GithubAuthProvider();
-        firebase.auth().signInWithRedirect(provider);
+        var provider = new this.$firebase.auth.GithubAuthProvider();
+        this.$firebase.auth().signInWithRedirect(provider);
       },
       signUpEmail() {
         this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(function(error) {
