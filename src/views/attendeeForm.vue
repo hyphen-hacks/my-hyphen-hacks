@@ -1,7 +1,7 @@
 <template>
   <div>
-    <navBar title="Attendee Application" :saved="saved" :saveStatus="true"></navBar>
-    <form @submit.prevent class="form" @keypress="startSave">
+    <navBar title="Attendee Application" :saved="saved()" :saveStatus="true"></navBar>
+    <form @submit.prevent class="form">
       <div class="screen--wide">
         <h1 class="heading--large">Apply For Hyphen-Hacks 2020</h1>
         <p class="desc">Because Hyphen-Hacks is a free event, we must limit the number of people who get accepted into
@@ -14,58 +14,130 @@
       <div class="screen--wide">
         <h2 class="heading">Who are you?</h2>
         <div class="input__row--2">
-          <formInput title="First Name" inputType="text" v-model="applicationModel.firstName"></formInput>
-          <formInput title="Last Name" inputType="text" v-model="applicationModel.lastName"></formInput>
+          <formInput title="First Name" inputType="text" data="firstName" v-on:save="startSave"></formInput>
+          <formInput title="Last Name" inputType="text" data="lastName" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
           <formInput title="Email" inputType="email"
                      desc="This email will be used for all further communications including the status of your application"
-                     v-model="applicationModel.email"></formInput>
+                     data="email" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
           <formInput title="Zipcode" inputType="zipcode"
                      desc="We aggregate this data to figure out how much of the Bay Area we are reaching"
-                     v-model="applicationModel.zip"></formInput>
+                    data="zip" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row--2">
           <formInput title="Birthday" inputType="date"
                      desc="We use this information to verify you are eligible for Hyphen-Hacks"
-                     v-model="applicationModel.birthday"></formInput>
-          <formInput title="Gender" inputType="text"
+                    data="birthday" v-on:save="startSave"></formInput>
+          <formInput title="Gender" inputType="select"
                      desc="We agregate this data to figure out what genders we are reaching"
-                     v-model="applicationModel.gender"></formInput>
+                     data="gender" v-on:save="startSave"
+                     :options="[{name: 'Female', value: 'female'},{name: 'Male', value: 'male'}, {name: 'Non-Gender Binary', value: 'nonBinary'}, {name: 'Prefer Not To Say', value: 'preferNotToSay'}, {name: 'Other', value: 'other'}]"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="Race/Ethnicity" inputType="text"
-                     desc="We aggregate this data to figure out what races/elasticities we are reaching"
-                     v-model="applicationModel.race"></formInput>
+          <MultiSelect title="Race/Ethnicity"
+                       desc="We aggregate this data to figure out what races/ethnicities we are reaching"
+                       data="race" v-on:save="startSave"
+                       :options="[{name: 'American Indian/Alaskan Native', value: 'americanIndianAlaskanNative'},{name: 'Asian or Asian American', value: 'asianAsianAmerican'}, {name: 'Pacific Islander', value: 'pacificIslander'}, {name: 'Black or African-American', value: 'blackAfricanAmerican'}, {name: 'Hispanic', value: 'Hispanic'}, {name: 'White/Caucasian', value: 'white'}, {name: 'Multiracial', value: 'multiracial'}, {'name': 'Prefer not to say', value: 'preferNoAnswer'}, {name: 'Other', value: 'other'}]"></MultiSelect>
+
         </div>
         <div class="input__row--2">
-          <formInput title="School" inputType="text"
-                     desc="We aggregate this data to learn what schools we are reaching."
-                     v-model="applicationModel.school"></formInput>
+          <formInput title="High School" inputType="text"
+                     desc="We use this information to understand what high schools our attendees come from."
+                     data="school" v-on:save="startSave"></formInput>
           <formInput title="Year of Graduation" inputType="text"
                      desc="We use this data to verify your eligibility for Hyphen-Hacks as well as aggregate data to figure out what grades we are reaching."
-                     v-model="applicationModel.graduation"></formInput>
+                     data="graduation" v-on:save="startSave"></formInput>
         </div>
       </div>
       <div class="screen--wide">
-        <h2 class="heading">Why do you want to attend?</h2>
+        <h2 class="heading">Why Hyphen-Hacks?</h2>
         <div class="input__row">
-          <formInput title="Why are you interested in attending Hyphen-Hacks?" inputType="longform"
-                     v-model="applicationModel.whyAreYouInterested"></formInput>
+          <formInput title="Why are you interested in attending?" inputType="longform"
+                     data="whyDoYouWantToAttend" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with software development?" inputType="text"
-                     v-model="applicationModel.softwareExperience"></formInput>
+          <formInput title="How much experience do you have with software development?" inputType="select"
+                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
+                     data="experienceSoftware" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with hackathons?" inputType="text"
-                     v-model="applicationModel.hackathonExperience"></formInput>
+          <formInput title="How much experience do you have with hardware development?" inputType="select"
+                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
+                     data="experienceHardware" v-on:save="startSave"></formInput>
+
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with coding in teams?" inputType="text"
-                     v-model="applicationModel.teamCodingExperience"></formInput>
+          <formInput title="How much experience do you have with hackathons?" inputType="select"
+                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
+                     data="experienceHackathon" v-on:save="startSave"></formInput>
+
+        </div>
+        <div class="input__row">
+          <formInput title="How much experience do you have with coding in teams?" inputType="select"
+                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
+                     data="experienceTeamCoding" v-on:save="startSave"></formInput>
+
+
+        </div>
+        <div class="input__row">
+          <formInput title="Description of computer science experience" inputType="longform"
+                     data="descriptionCompSciExp" v-on:save="startSave"></formInput>
+        </div>
+        <formInput title="Do you have a laptop?" inputType="select"
+                   :options="[{name: 'Yes', value: true}, {name: 'No, I would like to borrow one', value: false}]"
+                   data="laptop" v-on:save="startSave"></formInput>
+      </div>
+
+      <div class="screen--wide">
+        <h2 class="heading">Accommodations</h2>
+        <div class="input__row">
+          <MultiSelect title="Food allergies"
+                       data="foodAllergies" v-on:save="startSave"
+                       :options="[{name: 'All Nuts', value: 'allNuts'},{name: 'Peanuts', value: 'peanuts'},{name: 'Tree Nuts', value: 'treeNuts'}, {name: 'Fish', value: 'fish'}, {name: 'Shellfish', value: 'shellfish'}, {name: 'Gluten', value: 'gluten'}, {name: 'Soy', value: 'soy'}, {name: 'Dairy', value: 'dairy'}, {name: 'Other'}]"></MultiSelect>
+        </div>
+        <div class="input__row">
+          <MultiSelect title="Dietary Restrictions"
+                       data="dietaryRestrictions" v-on:save="startSave"
+                       :options="[{name: 'Vegetarian', value: 'vegetarian'},{name: 'Vegan', value: 'vegan'},{name: 'Kosher', value: 'kosher'}, {name: 'Halal', value: 'halal'}, {name: 'Gluten-free', value: 'glutenFree'}, {name: 'Diary-free', value: 'dairyFree'}, {name: 'Other'}]"></MultiSelect>
+        </div>
+        <div class="input__row">
+          <formInput title="Special Needs/Accommodations" inputType="longform"
+                     data="accommodations" v-on:save="startSave"></formInput>
+        </div>
+      </div>
+      <div class="screen--wide">
+        <h2 class="heading">Final Questions</h2>
+        <div class="input__row">
+          <formInput title="What is your shirt size?" inputType="select"
+                     :options="[{name: 'XS', value: 'xs'}, {name: 'S', value: 's'}, {name: 'M', value: 'm'}, {name: 'L', value: 'l'}, {name: 'XL', value: 'xl'}, {name: 'XXL', value: 'xxl'}]"
+                     v-model="application.shirtSize"  data="shirtSize" v-on:save="startSave"></formInput>
+        </div>
+        <div class="input__row">
+          <MultiSelect title="How did you find out about Hyphen-Hacks?"
+                       data="referrers" v-on:save="startSave"
+                       :options="[{name: 'Flyers/Posters', value: 'flyers'}, {name: 'MLH Website', value: 'mlhWebsite'}, {name: 'Friends', value: 'friends'}, {name: 'Parents', value: 'parents'}, {name: 'Lick Website', value: 'lickWebsite'}, {name: 'School Newspaper', value: 'schoolNewsPaper'}, {name: 'Teachers or School Admin', value: 'teachersOrSchoolAdmin'}, {name: 'Student Leaders', value: 'studentLeaders'}, {name: 'Hyphen-Hacks Social', value: 'hhSocial'}, {name: 'MLH Social', value: 'mlhSocial'}, {name: 'Other'}]"></MultiSelect>
+        </div>
+        <div class="input__row">
+          <formInput title="Any final comments?" inputType="longform"
+                       data="comments" v-on:save="startSave"></formInput>
+        </div>
+        <div class="input__row">
+          <div class="checkboxRow">
+
+            <input class="checkbox" id="terms" type="checkbox">
+            <label for="terms" data="agreeTerms" v-on:save="startSave" >I have read and Agree to Hyphen-Hacks' Terms and Conditions</label>
+
+          </div>
+        </div>
+        <div class="input__row">
+          <div class="checkboxRow">
+            <input class="checkbox" id="privacy" type="checkbox">
+            <label for="privacy"  data="conditions" v-on:save="startSave">I have read and Agree to Hyphen-Hacks' Privacy Policy</label>
+
+          </div>
         </div>
       </div>
       <div class="screen--wide">
@@ -74,35 +146,28 @@
           the button below to submit your application.</p>
         <button type="submit" class="btn">SUBMIT!</button>
       </div>
+
     </form>
   </div>
 </template>
 <script>
   import formInput from "@/components/formInput.vue"
+  import MultiSelect from "@/components/multiSelect.vue"
   import navBar from "@/components/nav.vue"
 
   let timeout = null
   export default {
     name: "attendeeApplicationForm",
-    components: {formInput, navBar},
+    components: {formInput, navBar, MultiSelect},
     data() {
       return {
-        saved: true,
-        applicationModel: {
-          firstName: "",
-          lastName: "",
-          email: "",
-          zip: "",
-          birthday: "",
-          gender: "",
-          race: "",
-          school: "",
-          graduation: "",
-          whyAreYouInterested: "",
-          softwareExperience: "",
-          hackathonExperience: "",
-          teamCodingExperience: ""
-        }
+        test: "test"
+        // saved: this.$store.getters.attendeeAppSaved
+      }
+    },
+    watch: {
+      application() {
+       // this.startSave()
       }
     },
     created() {
@@ -113,11 +178,15 @@
         console.log("attende form", this.user.uid)
         this.$firebase.firestore().collection("attendeeApplicationsIP").doc(this.user.uid).get().then(doc => {
           if (doc.exists) {
-            this.applicationModel = doc.data().data
+            this.$store.commit("attendeeApplication", doc.data().data)
+
           } else {
-            this.applicationModel.email = this.user.email
+            this.$store.commit("updateApplicationItem",{app: "attendee", key:"email", value: this.user.email} )
+
           }
           this.$store.commit("loading", false)
+          this.$store.commit("attendeeAppSaved", true)
+          this.$listeners
         })
 
         this.$firebase.firestore().collection("users").doc(this.user.uid).set({
@@ -133,22 +202,40 @@
       }
     },
     computed: {
+
       user() {
         return this.$store.getters.user
+      },
+      application: {
+        get() {
+          return this.$store.getters.attendeeApplication
+        },
+        set(value) {
+          console.log("change")
+        }
+
       }
     },
+
     methods: {
+      saved() {
+      //  console.log( this.$store.getters.attendeeAppSaved)
+        return this.$store.getters.attendeeAppSaved
+      },
       save() {
         timeout = null
+//console.log("saving...", this.application)
         this.$firebase.firestore().collection("attendeeApplicationsIP").doc(this.user.uid).set({
-          time: this.$moment().unix(), data: this.applicationModel
+          time: this.$moment().unix(), data: this.application
         }, {merge: true}).then(() => {
-          this.saved = true
+          this.$store.commit("attendeeAppSaved", true)
         })
+
 
       },
       startSave() {
-        this.saved = false
+        //console.log("start save")
+        this.$store.commit("attendeeAppSaved", false)
 
         window.clearTimeout(timeout)
         timeout = window.setTimeout(() => this.save(), 1000)
