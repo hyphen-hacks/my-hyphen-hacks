@@ -41,7 +41,9 @@ html, body {
 @mixin input--hover {
   @apply bg-gray-form_hover border-gray-form_hover;
 }
-
+.input.required, .input--textarea.required, .input.required:hover, .input.required:focus, .input--textarea.required:hover, .input--textarea.required:focus {
+  @apply border-warning;
+}
 .input {
  @include input;
 }
@@ -166,7 +168,11 @@ a:hover {
   @include card;
   max-width: 600px;
   width: 90vw;
-
+  min-height: 50vh;
+  img {
+    width: 80%;
+    margin: 1rem auto;
+  }
 }
 .screen--wide {
   @include card;

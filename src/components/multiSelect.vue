@@ -7,7 +7,8 @@
         <input v-if="option.name != 'Other'" class="checkbox" :id="formId(option.name)" v-model="values[option.name]" type="checkbox" @input="saveItem()">
         <input v-model="values.otherEnabled" v-if="option.name == 'Other'" class="checkbox" :id="formId(option.name)" type="checkbox" @input="saveItem()">
         <label :for="formId(option.name)">{{option.name}}</label>
-        <input v-if="option.name == 'Other'" :disabled="!values.otherEnabled" type="text" class="input" placeholder="Please Specify" v-model="values.other" @input="saveItem()">
+        <input v-if="option.name == 'Other' && values.otherEnabled" :disabled="!values.otherEnabled" type="text" class="input" placeholder="Please Specify" v-model="values.other" @input="saveItem()">
+        <input v-if="option.name == 'Other' && !values.otherEnabled" :disabled="!values.otherEnabled" type="text" class="input" placeholder="Please Specify"  @input="saveItem()">
       </div>
     </div>
     <p class="font-light">{{desc}}</p>

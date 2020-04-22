@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Apply from '../views/Apply.vue'
 import SignUpAttendee from '../views/AttendeeSignUp.vue'
 import ApplyAttendee from '../views/attendeeForm.vue'
+import Status from '../views/status.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/apply/attendee',
     name: 'Apply Attendee',
     component: ApplyAttendee
+  },
+  {
+    path: '/status',
+    name: 'Status',
+    component: Status
   }
 ]
 

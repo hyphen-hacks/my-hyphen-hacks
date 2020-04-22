@@ -5,6 +5,7 @@ import store from './store'
 import './assets/tailwind.scss'
 import firebase from 'firebase/app'
 import moment from 'moment'
+import swal from "sweetalert"
 import 'firebase/analytics'
 import 'firebase/performance'
 import 'firebase/remote-config'
@@ -23,6 +24,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 Vue.prototype.$firebase = firebase
 Vue.prototype.$moment = moment
+Vue.prototype.$swal = swal
 Vue.config.productionTip = false
 
 new Vue({

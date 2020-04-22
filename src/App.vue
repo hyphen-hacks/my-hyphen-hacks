@@ -14,12 +14,23 @@
     components: {Loader},
     mounted() {
       this.$firebase.auth().onAuthStateChanged(user => {
-        this.$store.commit("firebaseLoaded", true)
+
         if (user) {
 
           this.$store.commit("user", user)
+          this.$firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then((idToken) => {
+            // Send token to your backend via HTTPS
+            this.$store.commit("setToken", idToken)
+            this.$store.commit("firebaseLoaded", true)
+
+            // ...
+          }).catch(function(error) {
+            // Handle error
+          });
+
         } else {
           this.$store.commit("user", false)
+          this.$store.commit("firebaseLoaded", true)
         }
       })
     },

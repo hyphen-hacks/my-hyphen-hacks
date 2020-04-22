@@ -9,7 +9,9 @@ export default new Vuex.Store({
     firebaseLoaded: false,
     loading: true,
     api: "https://2020.hyphen-hacks.com",
+    token: "",
     attendeeAppSaved: true,
+    attendeeApplicationErrors: {},
     attendeeApplicationModel: {
       firstName: "",
       lastName: "",
@@ -25,7 +27,7 @@ export default new Vuex.Store({
       experienceHardware: "",
       experienceHackathon: "",
       experienceTeamCoding: "",
-      descriptionCompScieExp: "",
+      descriptionCompSciExp: "",
       laptop: "",
       foodAllergies: {},
       dietaryRestrictions: {},
@@ -36,9 +38,19 @@ export default new Vuex.Store({
       agreeTerms: false,
       agreePrivacy: false
 
-    }
+    },
+    showErrors: false
   },
   getters: {
+    token(state) {
+      return state.token
+    },
+    showErrors(state) {
+      return state.showErrors
+    },
+    attendeeAppErrors(state) {
+      return state.attendeeApplicationErrors
+    },
     attendeeAppSaved(state) {
       return state.attendeeAppSaved
     },
@@ -64,6 +76,13 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setToken(state, token) {
+      state.token = token
+    },
+    showErrors(state) {
+      state.showErrors = true
+    },
+
     attendeeAppSaved(state, saved) {
       state.attendeeAppSaved = saved
     },
@@ -77,6 +96,12 @@ export default new Vuex.Store({
       }
 
     },
+    updateValidation(state, data) {
+      switch (data.app) {
+        case "attendee":
+          state.attendeeApplicationErrors[data.key] = data.value
+      }
+    },
     loading(state, load) {
       state.loading = load
     },
@@ -88,7 +113,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+
   },
-  modules: {
-  }
+  modules: {}
 })

@@ -1,7 +1,7 @@
 <template>
   <div>
     <navBar title="Attendee Application" :saved="saved()" :saveStatus="true"></navBar>
-    <form @submit.prevent class="form">
+    <form @submit.prevent="submit()" class="form">
       <div class="screen--wide">
         <h1 class="heading--large">Apply For Hyphen-Hacks 2020</h1>
         <p class="desc">Because Hyphen-Hacks is a free event, we must limit the number of people who get accepted into
@@ -25,12 +25,12 @@
         <div class="input__row">
           <formInput title="Zipcode" inputType="zipcode"
                      desc="We aggregate this data to figure out how much of the Bay Area we are reaching"
-                    data="zip" v-on:save="startSave"></formInput>
+                     data="zip" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row--2">
           <formInput title="Birthday" inputType="date"
                      desc="We use this information to verify you are eligible for Hyphen-Hacks"
-                    data="birthday" v-on:save="startSave"></formInput>
+                     data="birthday" v-on:save="startSave"></formInput>
           <formInput title="Gender" inputType="select"
                      desc="We agregate this data to figure out what genders we are reaching"
                      data="gender" v-on:save="startSave"
@@ -47,7 +47,7 @@
           <formInput title="High School" inputType="text"
                      desc="We use this information to understand what high schools our attendees come from."
                      data="school" v-on:save="startSave"></formInput>
-          <formInput title="Year of Graduation" inputType="text"
+          <formInput title="Year of Graduation" inputType="year"
                      desc="We use this data to verify your eligibility for Hyphen-Hacks as well as aggregate data to figure out what grades we are reaching."
                      data="graduation" v-on:save="startSave"></formInput>
         </div>
@@ -105,7 +105,7 @@
         </div>
         <div class="input__row">
           <formInput title="Special Needs/Accommodations" inputType="longform"
-                     data="accommodations" v-on:save="startSave"></formInput>
+                     data="accommodations" notRequired="true" v-on:save="startSave"></formInput>
         </div>
       </div>
       <div class="screen--wide">
@@ -113,7 +113,7 @@
         <div class="input__row">
           <formInput title="What is your shirt size?" inputType="select"
                      :options="[{name: 'XS', value: 'xs'}, {name: 'S', value: 's'}, {name: 'M', value: 'm'}, {name: 'L', value: 'l'}, {name: 'XL', value: 'xl'}, {name: 'XXL', value: 'xxl'}]"
-                     v-model="application.shirtSize"  data="shirtSize" v-on:save="startSave"></formInput>
+                     v-model="application.shirtSize" data="shirtSize" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
           <MultiSelect title="How did you find out about Hyphen-Hacks?"
@@ -122,22 +122,16 @@
         </div>
         <div class="input__row">
           <formInput title="Any final comments?" inputType="longform"
-                       data="comments" v-on:save="startSave"></formInput>
+                     data="comments" v-on:save="startSave" notRequired="true"></formInput>
         </div>
         <div class="input__row">
-          <div class="checkboxRow">
 
-            <input class="checkbox" id="terms" type="checkbox">
-            <label for="terms" data="agreeTerms" v-on:save="startSave" >I have read and Agree to Hyphen-Hacks' Terms and Conditions</label>
-
-          </div>
+          <formInput title="I have read and Agree to Hyphen-Hacks' Terms and Conditions" inputType="checkbox"
+                     data="agreeTerms" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <div class="checkboxRow">
-            <input class="checkbox" id="privacy" type="checkbox">
-            <label for="privacy"  data="conditions" v-on:save="startSave">I have read and Agree to Hyphen-Hacks' Privacy Policy</label>
-
-          </div>
+          <formInput title="I have read and Agree to Hyphen-Hacks'Privacy Policy" inputType="checkbox"
+                     data="agreePrivacy" v-on:save="startSave"></formInput>
         </div>
       </div>
       <div class="screen--wide">
@@ -167,7 +161,7 @@
     },
     watch: {
       application() {
-       // this.startSave()
+        // this.startSave()
       }
     },
     created() {
@@ -181,14 +175,13 @@
             this.$store.commit("attendeeApplication", doc.data().data)
 
           } else {
-            this.$store.commit("updateApplicationItem",{app: "attendee", key:"email", value: this.user.email} )
+            this.$store.commit("updateApplicationItem", {app: "attendee", key: "email", value: this.user.email})
 
           }
           this.$store.commit("loading", false)
           this.$store.commit("attendeeAppSaved", true)
           this.$listeners
         })
-
         this.$firebase.firestore().collection("users").doc(this.user.uid).set({
           name: this.user.displayName ? this.user.displayName : "",
           email: this.user.email,
@@ -219,7 +212,7 @@
 
     methods: {
       saved() {
-      //  console.log( this.$store.getters.attendeeAppSaved)
+        //  console.log( this.$store.getters.attendeeAppSaved)
         return this.$store.getters.attendeeAppSaved
       },
       save() {
@@ -230,8 +223,6 @@
         }, {merge: true}).then(() => {
           this.$store.commit("attendeeAppSaved", true)
         })
-
-
       },
       startSave() {
         //console.log("start save")
@@ -239,6 +230,51 @@
 
         window.clearTimeout(timeout)
         timeout = window.setTimeout(() => this.save(), 1000)
+      },
+      submit() {
+        console.log("submitting")
+
+        let errors = this.$store.getters.attendeeAppErrors
+        let areErrors = false
+        let errorList = []
+        Object.keys(errors).forEach(i => {
+          if (errors[i]) {
+            areErrors = true
+            errorList.push(i)
+          }
+        })
+        if (areErrors) {
+          this.$store.commit("showErrors")
+          console.log(errorList)
+          this.$swal({
+            title: "Error",
+            text: "Please make sure you fill out all fields correctly",
+            icon: "error"
+          })
+        } else {
+          this.$store.commit("loading", true)
+
+          fetch(this.$store.getters.api + '/api/v1/apply/attendee', {
+            method: "post",
+            headers: {
+              "authorization": this.$store.getters.token,
+              "content-type": "application/json"
+            },
+            body: JSON.stringify({time: this.$moment().unix(), app: this.application})
+          }).then(async res => {
+            let body = await res.json()
+            console.log(body, res.status)
+            if (body.success) {
+              this.$router.push("/status")
+            } else {
+              this.$swal({
+                title: "Error",
+                text: "Please make sure you fill out all fields correctly, If this problem persists try reloading your browser",
+                icon: "error"
+              })
+            }
+          })
+        }
       }
     }
   }
