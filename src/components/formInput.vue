@@ -5,7 +5,10 @@
         v-if="inputType == 'date'">(mm/dd/yyyy)</span> <span v-if="showRequired" class="text-warning float-right">Required</span>
       <span v-if="!valid" class="text-warning float-right">{{error}}</span></label>
     <input :required="required" v-if="inputMode == 'text'" :type="inputType" :id="formId" class="input"
-           :class="{'required': showRequired || !valid}" type="text"
+           :class="{'required': showRequired || !valid}"
+           :placeholder="title" v-model="internalValue">
+    <input :required="required" v-if="inputMode == 'phone'" type="tel" :id="formId" class="input"
+           :class="{'required': showRequired || !valid}" autocomplete="tel"
            :placeholder="title" v-model="internalValue">
     <textarea :class="{'required': showRequired || !valid}" :required="required" class="input--textarea" :id="formId"
               :placeholder="title"
@@ -13,7 +16,7 @@
               v-model="internalValue"></textarea>
     <div class="checkboxRow" v-if="inputMode == 'checkbox'">
       <input class="checkbox" :id="formId" v-model="internalValue" type="checkbox">
-      <label :for="formId">{{title}}</label>
+      <label :for="formId">{{title}} <span v-if="!valid" class="text-warning float-right">{{error}}</span></label>
 
     </div>
 
@@ -57,46 +60,71 @@
 
     },
     computed: {
+      application() {
+        let route = this.$route.path
+        switch (route) {
+          case "/apply/mentor":
+            return "mentor"
+            break
+          case  "apply/attendee":
+            return "attendee"
+            break
+          default :
+            return "attendee"
+        }
+      },
       valid() {
         let result = true
+        console.log(this.inputType, this.inputMode)
         switch (this.inputType) {
           case "text":
             this.error = "Response not long enough"
-             result = this.internalValue.length > 1
+            result = this.internalValue.length > 1
             break
           case "email":
             this.error = "Invalid Email"
-             result = validateEmail(this.internalValue)
+            result = validateEmail(this.internalValue)
             break
           case "date":
             this.error = "Invalid Date"
             console.log(this.internalValue)
-             result = this.$moment(this.internalValue, "MM/DD/YYYY").isValid() || this.$moment(this.internalValue, "YYYY-MM-DD").isValid()
+            result = this.$moment(this.internalValue, "MM/DD/YYYY").isValid() || this.$moment(this.internalValue, "YYYY-MM-DD").isValid()
             break
           case "year":
             this.error = "Invalid Year"
             console.log(this.internalValue)
-             result = this.internalValue > 2019 && this.internalValue < 2040
+            result = this.internalValue > 2019 && this.internalValue < 2040
             break
           case "zipcode":
             this.error = "Invalid Zipcode"
-             result = /^\d{5}(?:-\d{4})?$/.test(this.internalValue)
+            result = /^\d{5}(?:-\d{4})?$/.test(this.internalValue)
             break
           case "longform" :
             this.error = "Response not long enough"
-             result = this.internalValue.length >= 2
+            result = this.internalValue.length >= 2
             break
           case "checkbox" :
-             result = true
+            this.error = "required"
+            if (this.required) {
+              result = this.internalValue
+              console.log("check box invalid", this.internalValue)
+            } else {
+              result = true
+              console.log("check box not required", this.internalValue)
+            }
+
             break
           case "select" :
-             result = true
+            result = true
             break
+          case "phone" :
+            this.error = "Invalid Phone Number"
+            result = true
         }
         if (this.required) {
-          this.$store.commit("updateValidation", {key: this.data, value: !result, app: "attendee"})
+          this.$store.commit("updateValidation", {key: this.data, value: !result, app: this.application})
           if (this.internalValue.length >= 1 || this.$store.getters.showErrors) {
-            console.log("invalid", result)
+            //console.log("invalid", result)
             return result
           } else {
             return true
@@ -111,17 +139,23 @@
         if (this.required && this.inputted && this.internalValue.length < 1) {
           return true
         } else {
-          return false
+          return this.$store.getters.showRequired
+
         }
       },
       internalValue: {
         get() {
-          return this.$store.getters.attendeeApplication[this.data] ?? ""
+          if (this.application == "attendee") {
+            return this.$store.getters.attendeeApplication[this.data] ?? ""
+          } else {
+            return this.$store.getters.mentorApplication[this.data] ?? ""
+          }
+
         },
         set(val) {
           this.inputted = true
-          // console.log("set val", val, this.data)
-          this.$store.commit("updateApplicationItem", {app: "attendee", key: this.data, value: val})
+           console.log("set val", val, this.data, this.inputType)
+          this.$store.commit("updateApplicationItem", {app: this.application, key: this.data, value: val})
           this.$emit('save')
         }
       },
@@ -146,6 +180,9 @@
             return "select"
           case "multiselect" :
             return "multi"
+            break
+          case "phone":
+            return "phone"
 
         }
       },

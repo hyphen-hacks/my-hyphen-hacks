@@ -12,6 +12,27 @@ export default new Vuex.Store({
     token: "",
     attendeeAppSaved: true,
     attendeeApplicationErrors: {},
+    mentorApplicationModel:{
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      company: "",
+      companyPosition: "",
+      expAttending: "",
+      expMentoringJudging: "",
+      expWorkingWithStudents: "",
+      areasOfExpertise: "",
+      foodAllergies: {},
+      dietaryRestrictions: {},
+      accommodations: "",
+      referrers: {},
+      shirtSize: "",
+      comments: "",
+      agreeTerms: false,
+      agreePrivacy: false,
+      agreeApplication: false
+    },
     attendeeApplicationModel: {
       firstName: "",
       lastName: "",
@@ -57,6 +78,9 @@ export default new Vuex.Store({
     attendeeApplication(state) {
       return state.attendeeApplicationModel
     },
+    mentorApplication(state) {
+      return state.mentorApplicationModel
+    },
     api(state) {
       if (window.location.hostname === "localhost") {
         return "http://localhost:3005"
@@ -89,18 +113,24 @@ export default new Vuex.Store({
     attendeeApplication(state, app) {
       state.attendeeApplicationModel = app
     },
+    mentorApplication(state, app) {
+      state.mentorApplicationModel = app
+    },
     updateApplicationItem(state, data) {
       switch (data.app) {
         case "attendee":
           state.attendeeApplicationModel[data.key] = data.value
+          break
+        case "mentor":
+          console.log("update mentor", data.key, data.value)
+          state.mentorApplicationModel[data.key] = data.value
       }
 
     },
     updateValidation(state, data) {
-      switch (data.app) {
-        case "attendee":
+
           state.attendeeApplicationErrors[data.key] = data.value
-      }
+
     },
     loading(state, load) {
       state.loading = load

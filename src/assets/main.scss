@@ -166,6 +166,8 @@ a:hover {
 }
 .screen {
   @include card;
+  display: flex;
+  flex-direction: column;
   max-width: 600px;
   width: 90vw;
   min-height: 50vh;
@@ -199,6 +201,9 @@ a:hover {
   width: 100%;
   display: flex;
   flex-direction: column;
+  label {
+    margin-bottom: 0.5rem;
+  }
 }
 .input__container.multi {
   margin: 3rem 0;

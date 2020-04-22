@@ -22,9 +22,23 @@
             // Send token to your backend via HTTPS
             this.$store.commit("setToken", idToken)
             this.$store.commit("firebaseLoaded", true)
+            fetch(this.$store.getters.api + "/api/v1/apply/status", {
+              method: "get",
+              headers: {
+                "authorization": this.$store.getters.token
+              }
+            }).then(async res => {
+              let resJson = await res.json()
+
+              console.log(resJson)
+              if (resJson.applied) {
+
+
+              }
+            })
 
             // ...
-          }).catch(function(error) {
+          }).catch(function (error) {
             // Handle error
           });
 

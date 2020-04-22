@@ -53,7 +53,7 @@
     },
     created() {
       if (this.user) {
-        this.$router.push('/apply/attendee')
+        this.$router.push('/apply/mentor')
       } else {
         this.$store.commit("loading", false)
       }
@@ -70,7 +70,7 @@
       signUpEmail() {
         this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.pass).then(user => {
           this.$store.commit("user", user)
-          this.$router.push("/apply/attendee")
+          this.$router.push("/apply/mentor")
         }).catch( (error) => {
           // Handle Errors here.
           var errorCode = error.code;

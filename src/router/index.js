@@ -3,7 +3,9 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Apply from '../views/Apply.vue'
 import SignUpAttendee from '../views/AttendeeSignUp.vue'
+import SignUpMentor from '../views/MentorSignUp.vue'
 import ApplyAttendee from '../views/attendeeForm.vue'
+import ApplyMentor from '../views/mentorForm.vue'
 import Status from '../views/status.vue'
 
 Vue.use(VueRouter)
@@ -25,9 +27,19 @@ const routes = [
     component: SignUpAttendee
   },
   {
+    path: '/signup/mentor',
+    name: 'Sign Up Mentor',
+    component: SignUpMentor
+  },
+  {
     path: '/apply/attendee',
     name: 'Apply Attendee',
     component: ApplyAttendee
+  },
+  {
+    path: '/apply/mentor',
+    name: 'Apply Mentor',
+    component: ApplyMentor
   },
   {
     path: '/status',

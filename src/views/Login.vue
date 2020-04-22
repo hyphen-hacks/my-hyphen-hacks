@@ -6,7 +6,7 @@
       <div class="screen">
         <h1 class="heading">Login</h1>
         <p class="desc">Login to view your Hyphen-Hacks dashboard</p>
-        <div v-if="!emailSignUp" class="grid justify-center">
+        <div v-if="!emailSignUp" class="grid justify-center mt-auto mb-auto ">
           <button @click="signInWithGithub" class="btn--dark mt-4"><i class="fab fa-github"></i> Login with
             Github
           </button>
@@ -15,14 +15,14 @@
           </button>
           <button @click="emailSignUp = true" class="btn mt-4">Use email and password</button>
         </div>
-        <button v-if="emailSignUp" @click="emailSignUp = false" class="mr-auto mt-5 text-primary">back</button>
-        <form @submit.prevent="signUpEmail" v-show="emailSignUp" class="flex flex-col justify-center">
+        <button v-if="emailSignUp" @click="emailSignUp = false" class="mr-auto mt-auto text-primary">back</button>
+        <form @submit.prevent="signUpEmail" v-show="emailSignUp" class="flex flex-col justify-center  mb-auto">
           <input required placeholder="email" type="email" class="input mb-5" v-model="email">
           <input required placeholder="password" type="password" class="input" v-model="pass">
           <p class="text-warning">{{emailError}}</p>
           <button type="submit" @click.prevent="signUpEmail" class="btn mt-5 mx-auto">Login</button>
         </form>
-
+        <a class="ml-auto mr-auto" href="https://admin.2020.hyphen-hacks.com">admin sign on</a>
       </div>
     </main>
   </div>
@@ -49,6 +49,7 @@
       }
     },
     created() {
+      this.$store.commit("loading", true)
       if (this.user) {
         this.handleUser()
       } else {
@@ -57,24 +58,40 @@
     },
     methods: {
       handleUser() {
-        console.log( "handling user", this.user.uid)
+        console.log("handling user", this.user.uid)
         if (this.user) {
-          this.$firebase.firestore().collection("users").doc(this.user.uid).get().then(doc => {
-            if (doc.exists) {
-              let data = doc.data()
-              console.log(data.intent, data.intent == "applyAttendee", "intent")
-              switch (data.intent) {
-                case "applyAttendee":
-                  this.$router.push('/apply/attendee')
-                  break
-                default:
-                  this.$router.push('/apply')
-                  break
-              }
-            } else {
+          fetch(this.$store.getters.api + "/api/v1/apply/status", {
+            method: "get",
+            headers: {
+              "authorization": this.$store.getters.token
+            }
+          }).then(async res => {
+            let resJson = await res.json()
 
+            console.log(resJson)
+            if (resJson.applied) {
+              this.$router.push("/status")
+            } else {
+              this.$firebase.firestore().collection("users").doc(this.user.uid).get().then(doc => {
+                if (doc.exists) {
+                  let data = doc.data()
+                  console.log(data.intent, data.intent == "applyAttendee", "intent")
+                  switch (data.intent) {
+                    case "applyAttendee":
+                      this.$router.push('/apply/attendee')
+                      break
+                    default:
+                      this.$router.push('/apply')
+                      break
+                  }
+                } else {
+                  this.$store.commit("loading", false)
+                }
+
+              })
             }
           })
+
 
         }
       },

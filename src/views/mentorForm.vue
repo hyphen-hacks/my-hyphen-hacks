@@ -3,11 +3,8 @@
     <navBar title="Attendee Application" :saved="saved()" :saveStatus="true"></navBar>
     <form @submit.prevent="submit()" class="form">
       <div class="screen--wide">
-        <h1 class="heading--large">Apply For Hyphen-Hacks 2020</h1>
-        <p class="desc">Because Hyphen-Hacks is a free event, we must limit the number of people who get accepted into
-          Hyphen-Hacks. Please complete our short application process to attend Hyphen-Hacks 2020.</p>
-        <p class="desc">We use this information to vet our attendees and to better understand what audiences we are
-          reaching.</p>
+        <h1 class="heading--large">Mentor at Hyphen-Hacks 2020</h1>
+        <p class="desc">Thank you so much for your interest in mentoring at Hyphen-Hacks! Please fill out this short application to help us figure out if Hyphen-Hacks will be a good fit.</p>
         <p class="desc">This information is just used internally and is never shared with anyone else.</p>
         <p class="desc">Feel free to come back to this form anytime, your answers are automatically saved.</p>
       </div>
@@ -17,78 +14,42 @@
           <formInput title="First Name" inputType="text" data="firstName" v-on:save="startSave"></formInput>
           <formInput title="Last Name" inputType="text" data="lastName" v-on:save="startSave"></formInput>
         </div>
-        <div class="input__row">
+        <div class="input__row--2">
           <formInput title="Email" inputType="email"
                      desc="This email will be used for all further communications including the status of your application"
                      data="email" v-on:save="startSave"></formInput>
+          <formInput title="Phone Number" inputType="phone"
+                     desc="This phone number will be used to contact you if we can't reach you during the event."
+                     data="phoneNumber" v-on:save="startSave"></formInput>
         </div>
-        <div class="input__row">
-          <formInput title="Zipcode" inputType="zipcode"
-                     desc="We aggregate this data to figure out how much of the Bay Area we are reaching"
-                     data="zip" v-on:save="startSave"></formInput>
-        </div>
-        <div class="input__row--2">
-          <formInput title="Birthday" inputType="date"
-                     desc="We use this information to verify you are eligible for Hyphen-Hacks"
-                     data="birthday" v-on:save="startSave"></formInput>
-          <formInput title="Gender" inputType="select"
-                     desc="We agregate this data to figure out what genders we are reaching"
-                     data="gender" v-on:save="startSave"
-                     :options="[{name: 'Female', value: 'female'},{name: 'Male', value: 'male'}, {name: 'Non-Gender Binary', value: 'nonBinary'}, {name: 'Prefer Not To Say', value: 'preferNotToSay'}, {name: 'Other', value: 'other'}]"></formInput>
-        </div>
-        <div class="input__row">
-          <MultiSelect title="Race/Ethnicity"
-                       desc="We aggregate this data to figure out what races/ethnicities we are reaching"
-                       data="race" v-on:save="startSave"
-                       :options="[{name: 'American Indian/Alaskan Native', value: 'americanIndianAlaskanNative'},{name: 'Asian or Asian American', value: 'asianAsianAmerican'}, {name: 'Pacific Islander', value: 'pacificIslander'}, {name: 'Black or African-American', value: 'blackAfricanAmerican'}, {name: 'Hispanic', value: 'Hispanic'}, {name: 'White/Caucasian', value: 'white'}, {name: 'Multiracial', value: 'multiracial'}, {'name': 'Prefer not to say', value: 'preferNoAnswer'}, {name: 'Other', value: 'other'}]"></MultiSelect>
 
-        </div>
-        <div class="input__row--2">
-          <formInput title="High School" inputType="text"
-                     desc="We use this information to understand what high schools our attendees come from."
-                     data="school" v-on:save="startSave"></formInput>
-          <formInput title="Year of Graduation" inputType="year"
-                     desc="We use this data to verify your eligibility for Hyphen-Hacks as well as aggregate data to figure out what grades we are reaching."
-                     data="graduation" v-on:save="startSave"></formInput>
-        </div>
       </div>
       <div class="screen--wide">
-        <h2 class="heading">Why Hyphen-Hacks?</h2>
+        <h2 class="heading">What is your previous experience?</h2>
         <div class="input__row">
-          <formInput title="Why are you interested in attending?" inputType="longform"
-                     data="whyDoYouWantToAttend" v-on:save="startSave"></formInput>
+          <formInput title="What company/program are you affiliated with?" inputType="text"
+                     data="company" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with software development?" inputType="select"
-                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
-                     data="experienceSoftware" v-on:save="startSave"></formInput>
+          <formInput title="What is your position there?" inputType="text"
+                     data="companyPosition" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with hardware development?" inputType="select"
-                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
-                     data="experienceHardware" v-on:save="startSave"></formInput>
-
+          <formInput title="Please provide a brief description of your previous experience ATTENDING hackathons" inputType="longform"
+                     data="expAttending" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with hackathons?" inputType="select"
-                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
-                     data="experienceHackathon" v-on:save="startSave"></formInput>
-
+          <formInput title="Please provide a brief description of your previous experience MENTORING or JUDGING hackathons" inputType="longform"
+                     data="expMentoringJudging" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="How much experience do you have with coding in teams?" inputType="select"
-                     :options="[{name: 'None', value: 'none'},{name: 'A little', value: 'aLittle'}, {name: 'Some amount', value: 'someAmount'}, {name: 'A Lot', value: 'aLot'}, {name: 'This is my life', value: 'thisIsMyLife'}]"
-                     data="experienceTeamCoding" v-on:save="startSave"></formInput>
-
-
-        </div>
+        <formInput title="Please provide a brief description of your previous experience working with high school students in general" inputType="longform"
+                   data="expWorkingWithStudents" v-on:save="startSave"></formInput>
+      </div>
         <div class="input__row">
-          <formInput title="Description of computer science experience" inputType="longform"
-                     data="descriptionCompSciExp" v-on:save="startSave"></formInput>
+          <formInput title="What do you consider to be your areas of expertise (that you could help students with and/or evaluate them for)? E.g. JavaScript, machine learning, front-end development" inputType="text"
+                     data="areasOfExpertise" v-on:save="startSave"></formInput>
         </div>
-        <formInput title="Do you have a laptop?" inputType="select"
-                   :options="[{name: 'Yes', value: true}, {name: 'No, I would like to borrow one', value: false}]"
-                   data="laptop" v-on:save="startSave"></formInput>
       </div>
 
       <div class="screen--wide">
@@ -123,6 +84,10 @@
         <div class="input__row">
           <formInput title="Any final comments?" inputType="longform"
                      data="comments" v-on:save="startSave" notRequired="true"></formInput>
+        </div>
+        <div class="input__row">
+          <formInput title="I understand that this is an application and my involvement in Hyphen-Hacks has not been confirmed." inputType="checkbox"
+                     data="agreeApplication" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
 
@@ -182,13 +147,13 @@
           } else {
 
             console.log("attende form", this.user.uid)
-            this.$firebase.firestore().collection("attendeeApplicationsIP").doc(this.user.uid).get().then(doc => {
+            this.$firebase.firestore().collection("mentorApplicationsIP").doc(this.user.uid).get().then(doc => {
               if (doc.exists) {
-                this.$store.commit("attendeeApplication", doc.data().data)
+                this.$store.commit("mentorApplication", doc.data().data)
                 console.log("pulled from record", doc.data().data)
               } else {
                 console.log("update email")
-                this.$store.commit("updateApplicationItem", {app: "attendee", key: "email", value: this.user.email})
+                this.$store.commit("updateApplicationItem", {app: "mentor", key: "email", value: this.user.email})
 
               }
               this.$store.commit("loading", false)
@@ -203,20 +168,32 @@
               photoURL: this.user.photoURL ? this.user.photoURL : "",
               provider: this.user.providerData ? this.user.providerData : [],
               lastSeen: this.$moment().unix(),
-              intent: "applyAttendee"
+              intent: "applyMentor"
             })
           }
         })
       }
     },
     computed: {
+      applicationType() {
+        let route = this.$route.path
+        switch (route) {
+          case "/apply/mentor":
+            return "mentor"
+            break
+          case  "apply/attendee":
+            return "attendee"
+            break
+          default :
+            return "attendee"
+        }},
 
       user() {
         return this.$store.getters.user
       },
       application: {
         get() {
-          return this.$store.getters.attendeeApplication
+          return this.$store.getters.mentorApplication
         },
         set(value) {
           console.log("change")
@@ -233,7 +210,7 @@
       save() {
         timeout = null
 //console.log("saving...", this.application)
-        this.$firebase.firestore().collection("attendeeApplicationsIP").doc(this.user.uid).set({
+        this.$firebase.firestore().collection("mentorApplicationsIP").doc(this.user.uid).set({
           time: this.$moment().unix(), data: this.application
         }, {merge: true}).then(() => {
           this.$store.commit("attendeeAppSaved", true)
@@ -269,7 +246,7 @@
         } else {
           this.$store.commit("loading", true)
 
-          fetch(this.$store.getters.api + '/api/v1/apply/attendee', {
+          fetch(this.$store.getters.api + '/api/v1/apply/mentor', {
             method: "post",
             headers: {
               "authorization": this.$store.getters.token,
@@ -282,6 +259,7 @@
             if (body.success) {
               this.$router.push("/status")
             } else {
+              this.$store.commit("loading", false)
               this.$swal({
                 title: "Error",
                 text: "Please make sure you fill out all fields correctly, If this problem persists try reloading your browser",

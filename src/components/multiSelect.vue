@@ -38,11 +38,26 @@
       //this.values = this.$store.getters.attendeeApplication[this.data] ?? {}
     },
     computed: {
-
+      application() {
+        let route = this.$route.path
+        switch (route) {
+          case "/apply/mentor":
+            return "mentor"
+            break
+          case  "apply/attendee":
+            return "attendee"
+            break
+          default :
+            return "attendee"
+        }
+      },
       values: {
         get() {
-        //  console.log(this.$store.getters.attendeeApplication[this.data]?? {}, "data")
-          return this.$store.getters.attendeeApplication[this.data] ?? {}
+          if (this.application == "attendee") {
+            return this.$store.getters.attendeeApplication[this.data] ??{}
+          } else {
+            return this.$store.getters.mentorApplication[this.data] ?? {}
+          }
         },
         set(val) {
 
@@ -55,8 +70,8 @@
     },
     methods: {
       saveItem() {
-       // console.log("set val", this.values, this.data)
-        this.$store.commit("updateApplicationItem", {app: "attendee", key:this.data, value: this.values})
+        console.log("set val", this.values, this.data)
+        this.$store.commit("updateApplicationItem", {app: this.application, key:this.data, value: this.values})
         this.$emit('save')
       },
       formId(title) {
