@@ -47,9 +47,9 @@
           <formInput title="High School" inputType="text"
                      desc="We use this information to understand what high schools our attendees come from."
                      data="school" v-on:save="startSave"></formInput>
-          <formInput title="Year of Graduation" inputType="year"
+          <formInput title="Year of Graduation" inputType="select"
                      desc="We use this data to verify your eligibility for Hyphen-Hacks as well as aggregate data to figure out what grades we are reaching."
-                     data="graduation" v-on:save="startSave"></formInput>
+                     data="graduation" v-on:save="startSave" :options="[{name: '2021', value: '2021'},{name: '2022', value: '2022'},{name: '2023', value: '2023'},{name: '2024', value: '2024'}]"></formInput>
         </div>
       </div>
       <div class="screen--wide">
@@ -86,9 +86,10 @@
           <formInput title="Description of computer science experience" inputType="longform"
                      data="descriptionCompSciExp" v-on:save="startSave"></formInput>
         </div>
-        <formInput title="Do you have a laptop?" inputType="select"
-                   :options="[{name: 'Yes', value: true}, {name: 'No, I would like to borrow one', value: false}]"
-                   data="laptop" v-on:save="startSave"></formInput>
+        <formInput title="Do you have a team?" inputType="select"
+                   :options="[{name: 'Yes', value: true}, {name: 'No, I would like meet new people during the event', value: false}]"
+                   data="team" v-on:save="startSave" desc="Coming with a team is optional at Hyphen-Hacks. During the event we hold a mixer to help people create new teams."></formInput>
+
       </div>
 
       <div class="screen--wide">
@@ -101,12 +102,15 @@
         <div class="input__row">
           <MultiSelect title="Dietary Restrictions"
                        data="dietaryRestrictions" v-on:save="startSave"
-                       :options="[{name: 'Vegetarian', value: 'vegetarian'},{name: 'Vegan', value: 'vegan'},{name: 'Kosher', value: 'kosher'}, {name: 'Halal', value: 'halal'}, {name: 'Gluten-free', value: 'glutenFree'}, {name: 'Diary-free', value: 'dairyFree'}, {name: 'Other'}]"></MultiSelect>
+                       :options="[{name: 'Vegetarian', value: 'vegetarian'},{name: 'Vegan', value: 'vegan'},{name: 'Kosher', value: 'kosher'}, {name: 'Halal', value: 'halal'}, {name: 'Gluten-free', value: 'glutenFree'}, {name: 'Dairy-free', value: 'dairyFree'}, {name: 'Other'}]"></MultiSelect>
         </div>
         <div class="input__row">
           <formInput title="Special Needs/Accommodations" inputType="longform"
                      data="accommodations" notRequired="true" v-on:save="startSave"></formInput>
         </div>
+        <formInput title="Do you have a laptop?" inputType="select"
+                   :options="[{name: 'Yes', value: true}, {name: 'No, I would like to borrow one', value: false}]"
+                   data="laptop" v-on:save="startSave"></formInput>
       </div>
       <div class="screen--wide">
         <h2 class="heading">Final Questions</h2>
@@ -126,11 +130,11 @@
         </div>
         <div class="input__row">
 
-          <formInput title="I have read and Agree to Hyphen-Hacks' Terms and Conditions" inputType="checkbox"
+          <formInput title="I have read and agree to Hyphen-Hacks' Terms and Conditions" inputType="checkbox"
                      data="agreeTerms" v-on:save="startSave"></formInput>
         </div>
         <div class="input__row">
-          <formInput title="I have read and Agree to Hyphen-Hacks'Privacy Policy" inputType="checkbox"
+          <formInput title="I have read and agree to Hyphen-Hacks'Privacy Policy" inputType="checkbox"
                      data="agreePrivacy" v-on:save="startSave"></formInput>
         </div>
       </div>

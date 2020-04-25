@@ -14,6 +14,16 @@
         <p class="desc">Your application has been submitted to our review board. Our review process usually takes up to
           two weeks. You will receive an email when the status of your application changes.</p>
       </div>
+      <div v-if="!status.waiverCompleted && status.reviewed && status.role == 'attendee'" class="screen">
+        <img src="../assets/undraw_blooming_jtv6.svg" alt="">
+        <h1 class="heading">We can’t wait to see you!</h1>
+        <p class="desc">Your application has been accepted! Please stay tuned for more information about event logistics and waivers.</p>
+      </div>
+      <div v-if="!status.waiverCompleted && status.reviewed && status.role == 'mentor'" class="screen">
+        <img src="../assets/undraw_blooming_jtv6.svg" alt="">
+        <h1 class="heading">We can’t wait to see you!</h1>
+        <p class="desc">Thank you for signing up to mentor at Hyphen-Hacks. Please stay tuned for more information about event logistics and waivers.</p>
+      </div>
     </main>
   </div>
 

@@ -81,7 +81,6 @@ select.input {
   border-radius: 3px;
   display: inline-block;
   position: relative;
-  z-index: 0;
 }
 .checkbox:active, .checkbox:checked:active {
   box-shadow: 0 1px 2px black;
@@ -107,6 +106,9 @@ select.input {
   padding: 0.5rem 0;
   .checkbox {
     margin-right: 1rem;
+  }
+  @media screen and (max-width: 700px){
+    flex-wrap: wrap;
   }
 }
 a {
@@ -160,9 +162,16 @@ a:hover {
 }
 .heading {
   @apply text-4xl font-bold;
+  @media screen and (max-width:700px) {
+    @apply text-xl;
+  }
+
 }
 .heading--large {
   @apply text-5xl font-bold;
+  @media screen and (max-width:700px) {
+    @apply text-2xl;
+  }
 }
 .screen {
   @include card;
@@ -196,6 +205,13 @@ a:hover {
 .input__row--2 {
   @include inputRow;
   @apply grid grid-cols-2 gap-4;
+@media screen and (max-width: 700px) {
+  display: block;
+ .input__container {
+   margin-top: 1rem;
+ }
+}
+
 }
 .input__container {
   width: 100%;
@@ -223,6 +239,11 @@ a:hover {
   top: 0;
   z-index: 999;
   @apply grid grid-cols-3  p-4 items-center ;
+  @media screen and (max-width: 700px){
+    height: 10rem;
+    @apply grid-cols-1 gap-2;
+    position: absolute;
+  }
 }
 .nav__logo {
   height: 3rem;
@@ -232,6 +253,10 @@ a:hover {
   @apply font-bold text-xl;
 }
 .nav__spacer {
+  @media screen and (max-width: 700px){
+    height: 10rem;
+
+  }
   height: 5rem;
   width: 100%;
   display: block;

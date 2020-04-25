@@ -8,13 +8,24 @@
 </template>
 <script>
   import Loader from "@/components/loading.vue"
-
+let reloadToken,tokenRefresh
   export default {
     name: "app",
     components: {Loader},
     mounted() {
       this.$firebase.auth().onAuthStateChanged(user => {
+        let getToken = (trig) => {
+          console.log('token trigger', trig)
+          if (this.$firebase.auth().currentUser) {
+            this.$firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then((idToken) => {
 
+              this.$store.commit("setToken", idToken)
+
+              tokenRefresh =   window.setInterval(function (){getToken("interval")}, 900000)
+            })
+          }
+
+        }
         if (user) {
 
           this.$store.commit("user", user)
@@ -22,6 +33,7 @@
             // Send token to your backend via HTTPS
             this.$store.commit("setToken", idToken)
             this.$store.commit("firebaseLoaded", true)
+            reloadToken = window.addEventListener("focus", function() {getToken("focus")}, false);
             fetch(this.$store.getters.api + "/api/v1/apply/status", {
               method: "get",
               headers: {

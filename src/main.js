@@ -6,11 +6,13 @@ import './assets/tailwind.scss'
 import firebase from 'firebase/app'
 import moment from 'moment'
 import swal from "sweetalert"
+import * as Sentry from '@sentry/browser';
 import 'firebase/analytics'
 import 'firebase/performance'
 import 'firebase/remote-config'
 import 'firebase/auth'
 import 'firebase/firestore'
+const version = require("../package").version
 const firebaseConfig = {
   apiKey: "AIzaSyCvP2O35KnfzOghBF6Ou3bQcD6xCkmeLb0",
   authDomain: "hyphen-hacks-2020.firebaseapp.com",
@@ -26,7 +28,14 @@ Vue.prototype.$firebase = firebase
 Vue.prototype.$moment = moment
 Vue.prototype.$swal = swal
 Vue.config.productionTip = false
+if (window.location.hostname != "localhost") {
+  Vue.prototype.$analytics = firebase.analytics()
+  Sentry.init({ dsn: 'https://b86c672475de48299fdfb24ff92988e7@o130965.ingest.sentry.io/5211792', release: `My-Hyphen-Hacks@${version}`});
+} else {
+  Vue.prototype.$analytics = {
 
+  }
+}
 new Vue({
   router,
   store,

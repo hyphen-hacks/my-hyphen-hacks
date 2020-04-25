@@ -9,9 +9,9 @@
         <p class="desc">There are three ways to be a part of Hyphen-Hacks.</p>
         <p class="desc">For for more informatino about these roles go to our main website:
           <a href="https://hyphen-hacks.com">hyphen-hacks.com</a></p>
-        <div  class="grid grid-col-1 justify-center">
+        <div  class="grid grid-col-1 justify-center my-auto">
           <router-link class="btn--dark mt-4 " to="/apply/mentor">Mentor</router-link>
-          <router-link class="btn--dark mt-4 " to="/apply/volunteer">Volunteer</router-link>
+          <router-link v-if="false" class="btn--dark mt-4 " to="/apply/volunteer">Volunteer</router-link>
           <router-link class="btn mt-4" to="/apply/attendee">Attend</router-link>
 
         </div>

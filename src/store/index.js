@@ -56,6 +56,7 @@ export default new Vuex.Store({
       shirtSize: "",
       referrers: {},
       comments: "",
+      team: "",
       agreeTerms: false,
       agreePrivacy: false
 

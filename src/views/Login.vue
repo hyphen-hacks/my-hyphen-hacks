@@ -52,6 +52,7 @@
       this.$store.commit("loading", true)
       if (this.user) {
         this.handleUser()
+
       } else {
         this.$store.commit("loading", false)
       }
@@ -66,8 +67,9 @@
               "authorization": this.$store.getters.token
             }
           }).then(async res => {
-            let resJson = await res.json()
 
+            let resJson = await res.json()
+            console.log(res, resJson)
             console.log(resJson)
             if (resJson.applied) {
               this.$router.push("/status")
@@ -80,12 +82,16 @@
                     case "applyAttendee":
                       this.$router.push('/apply/attendee')
                       break
+                    case "applyMentor":
+                      this.$router.push('/apply/mentor')
+                      break
                     default:
                       this.$router.push('/apply')
                       break
                   }
                 } else {
                   this.$store.commit("loading", false)
+                  this.$router.push('/apply')
                 }
 
               })
